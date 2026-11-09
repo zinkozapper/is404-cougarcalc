@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -11,7 +11,7 @@
         --panel-border: #e3d8c4;
         --text: #2f2a24;
         --muted: #7a6b58;
-        --accent: #1E3A5F;
+        --accent: #1e3a5f;
         --accent-dark: #142c46;
         --accent-soft: #d7e3f0;
         --gold: #d99f2b;
@@ -207,8 +207,10 @@
       <div class="header">
         <div class="header-text">
           <h1>CougarCalc</h1>
-          <p class="subtitle">A classic calculator for quick math.</p>
-          <div id="environmentBadge" class="environment-badge">Checking environment…</div>
+          <p class="subtitle">Learning Git and AWS in IS 404!</p>
+          <div id="environmentBadge" class="environment-badge">
+            Checking environment…
+          </div>
           <div class="display">
             <div id="formula" class="formula">0</div>
             <div id="result" class="result">0</div>
@@ -261,33 +263,33 @@
 
     <script src="/calculator-logic.js"></script>
     <script>
-      const formulaNode = document.getElementById('formula');
-      const resultNode = document.getElementById('result');
-      const historyList = document.getElementById('historyList');
-      const historyToggle = document.getElementById('historyToggle');
-      const clearButton = document.getElementById('clear');
-      const backspaceButton = document.getElementById('backspace');
-      const equalsButton = document.getElementById('equals');
-      const keypadButtons = document.querySelectorAll('[data-value]');
-      const display = document.querySelector('.display');
-      const environmentBadge = document.getElementById('environmentBadge');
-      const persistenceStatus = document.getElementById('persistenceStatus');
+      const formulaNode = document.getElementById("formula");
+      const resultNode = document.getElementById("result");
+      const historyList = document.getElementById("historyList");
+      const historyToggle = document.getElementById("historyToggle");
+      const clearButton = document.getElementById("clear");
+      const backspaceButton = document.getElementById("backspace");
+      const equalsButton = document.getElementById("equals");
+      const keypadButtons = document.querySelectorAll("[data-value]");
+      const display = document.querySelector(".display");
+      const environmentBadge = document.getElementById("environmentBadge");
+      const persistenceStatus = document.getElementById("persistenceStatus");
       const {
         appendValue: appendValueLogic,
         formatResult,
-        beginNextExpression
+        beginNextExpression,
       } = window.CalculatorLogic;
 
-      let formula = '0';
+      let formula = "0";
       let historyVisible = true;
       let justEvaluated = false;
       let lastResult = null;
 
       function updateDisplay() {
         formulaNode.textContent = formula;
-        resultNode.textContent = '0';
+        resultNode.textContent = "0";
         persistenceStatus.hidden = true;
-        persistenceStatus.textContent = '';
+        persistenceStatus.textContent = "";
       }
 
       function appendValue(value) {
@@ -304,7 +306,7 @@
       }
 
       function clearFormula() {
-        formula = '0';
+        formula = "0";
         justEvaluated = false;
         lastResult = null;
         updateDisplay();
@@ -312,7 +314,7 @@
 
       function backspace() {
         if (formula.length <= 1) {
-          formula = '0';
+          formula = "0";
         } else {
           formula = formula.slice(0, -1);
         }
@@ -321,36 +323,35 @@
 
       function toggleHistory() {
         historyVisible = !historyVisible;
-        historyList.style.display = historyVisible ? 'block' : 'none';
-        historyToggle.textContent = historyVisible ? 'Hide History' : 'History';
+        historyList.style.display = historyVisible ? "block" : "none";
+        historyToggle.textContent = historyVisible ? "Hide History" : "History";
       }
 
       function renderHistory(history) {
         historyList.replaceChildren();
 
         if (history.length === 0) {
-          historyList.textContent = 'No calculations yet.';
+          historyList.textContent = "No calculations yet.";
           return;
         }
 
         history.forEach((calculation) => {
-          const historyItem = document.createElement('div');
-          historyItem.textContent =
-            `${calculation.expression} = ${formatResult(calculation.result)}`;
+          const historyItem = document.createElement("div");
+          historyItem.textContent = `${calculation.expression} = ${formatResult(calculation.result)}`;
           historyList.appendChild(historyItem);
         });
       }
 
       async function loadHistory() {
         try {
-          const response = await fetch('/history');
+          const response = await fetch("/history");
           if (!response.ok) {
-            throw new Error('History request failed.');
+            throw new Error("History request failed.");
           }
 
           renderHistory(await response.json());
         } catch (_error) {
-          historyList.textContent = 'History unavailable.';
+          historyList.textContent = "History unavailable.";
         }
       }
 
@@ -361,19 +362,19 @@
       function handleKeyboardInput(event) {
         const key = event.key;
 
-        if (key === 'Enter') {
+        if (key === "Enter") {
           event.preventDefault();
           handleEquals();
           return;
         }
 
-        if (key === 'Backspace') {
+        if (key === "Backspace") {
           event.preventDefault();
           backspace();
           return;
         }
 
-        if (key === 'Escape' || key === 'Delete') {
+        if (key === "Escape" || key === "Delete") {
           event.preventDefault();
           clearFormula();
           return;
@@ -387,44 +388,45 @@
       }
 
       keypadButtons.forEach((button) => {
-        button.addEventListener('click', () => {
+        button.addEventListener("click", () => {
           appendValue(button.dataset.value);
         });
       });
 
-      clearButton.addEventListener('click', clearFormula);
-      backspaceButton.addEventListener('click', backspace);
-      historyToggle.addEventListener('click', toggleHistory);
-      historyList.style.display = 'block';
-      historyToggle.textContent = 'Hide History';
-      display.addEventListener('keydown', handleKeyboardInput);
-      display.setAttribute('tabindex', '0');
+      clearButton.addEventListener("click", clearFormula);
+      backspaceButton.addEventListener("click", backspace);
+      historyToggle.addEventListener("click", toggleHistory);
+      historyList.style.display = "block";
+      historyToggle.textContent = "Hide History";
+      display.addEventListener("keydown", handleKeyboardInput);
+      display.setAttribute("tabindex", "0");
 
-      fetch('/environment')
+      fetch("/environment")
         .then((response) => response.json())
         .then((data) => {
           const environmentName =
-            data.environment.charAt(0).toUpperCase() + data.environment.slice(1);
+            data.environment.charAt(0).toUpperCase() +
+            data.environment.slice(1);
           environmentBadge.textContent = `Hosting: ${environmentName}`;
         })
         .catch(() => {
-          environmentBadge.textContent = 'Hosting: Unknown';
+          environmentBadge.textContent = "Hosting: Unknown";
         });
 
-      equalsButton.addEventListener('click', async () => {
+      equalsButton.addEventListener("click", async () => {
         equalsButton.disabled = true;
 
         try {
-          const response = await fetch('/calculate', {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ expression: formula })
+          const response = await fetch("/calculate", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ expression: formula }),
           });
 
           const data = await response.json();
 
           if (!response.ok) {
-            resultNode.textContent = 'Error';
+            resultNode.textContent = "Error";
             return;
           }
 
@@ -436,12 +438,12 @@
             persistenceStatus.textContent = data.warning;
             persistenceStatus.hidden = false;
           } else {
-            persistenceStatus.textContent = '';
+            persistenceStatus.textContent = "";
             persistenceStatus.hidden = true;
           }
           await loadHistory();
         } catch (_error) {
-          resultNode.textContent = 'Network Error';
+          resultNode.textContent = "Network Error";
         } finally {
           equalsButton.disabled = false;
         }
